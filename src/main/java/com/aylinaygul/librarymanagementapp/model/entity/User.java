@@ -35,6 +35,6 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private List<Record> records;
+    private List<BorrowRecord> records;
 
 }

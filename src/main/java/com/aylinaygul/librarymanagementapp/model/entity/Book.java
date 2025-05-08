@@ -40,6 +40,6 @@ public class Book {
     private boolean available;
 
     @OneToMany(mappedBy = "book")
-    private List<Record> records;
+    private List<BorrowRecord> records;
 
 }

@@ -3,7 +3,6 @@ package com.aylinaygul.librarymanagementapp.model.entity;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Record {
+public class BorrowRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
