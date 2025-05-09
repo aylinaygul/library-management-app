@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aylinaygul.librarymanagementapp.model.dto.request.BookRequestDTO;
-import com.aylinaygul.librarymanagementapp.model.dto.response.BookResponseDTO;
+import com.aylinaygul.librarymanagementapp.model.dto.request.BookRequest;
+import com.aylinaygul.librarymanagementapp.model.dto.response.BookResponse;
 import com.aylinaygul.librarymanagementapp.service.BookService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,14 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping()
-    public ResponseEntity<List<BookResponseDTO>> getAllBooks() {
+    public ResponseEntity<List<BookResponse>> getAllBooks() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bookService.getAllBooks());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponseDTO> getBookById(@PathVariable UUID id) {
-        BookResponseDTO book = bookService.getBookById(id);
+    public ResponseEntity<BookResponse> getBookById(@PathVariable UUID id) {
+        BookResponse book = bookService.getBookById(id);
 
         if (book == null) {
             return ResponseEntity.notFound().build();
@@ -44,17 +44,17 @@ public class BookController {
     }
 
     @PostMapping()
-    public ResponseEntity<BookResponseDTO> createBook(@RequestBody BookRequestDTO book) {
-        BookResponseDTO createdBook = bookService.createBook(book);
+    public ResponseEntity<BookResponse> createBook(@RequestBody BookRequest book) {
+        BookResponse createdBook = bookService.createBook(book);
         return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookResponseDTO> updateBook(
+    public ResponseEntity<BookResponse> updateBook(
             @PathVariable UUID id,
-            @RequestBody BookRequestDTO bookRequestDTO) {
+            @RequestBody BookRequest bookRequestDTO) {
 
-        BookResponseDTO updatedBook = bookService.updateBook(id, bookRequestDTO);
+        BookResponse updatedBook = bookService.updateBook(id, bookRequestDTO);
         return ResponseEntity.ok(updatedBook);
     }
 
