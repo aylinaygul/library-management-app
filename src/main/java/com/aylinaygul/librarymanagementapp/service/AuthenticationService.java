@@ -12,6 +12,7 @@ import com.aylinaygul.librarymanagementapp.model.dto.request.AuthenticationReque
 import com.aylinaygul.librarymanagementapp.model.dto.request.RegisterRequest;
 import com.aylinaygul.librarymanagementapp.model.dto.response.AuthenticationResponse;
 import com.aylinaygul.librarymanagementapp.repository.UserRepository;
+import com.aylinaygul.librarymanagementapp.security.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +22,7 @@ public class AuthenticationService {
 
         private final UserRepository userRepository;
         private final PasswordEncoder passwordEncoder;
-        private final JwtService jwtService;
+        private final JwtUtil jwtUtil;
         private final AuthenticationManager authenticationManager;
 
         public AuthenticationResponse register(RegisterRequest request) {
@@ -33,7 +34,7 @@ public class AuthenticationService {
                                 .build();
 
                 userRepository.save(user);
-                var jwtToken = jwtService.generateToken(user);
+                var jwtToken = jwtUtil.generateToken(user);
 
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
@@ -45,7 +46,7 @@ public class AuthenticationService {
                                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
                 var user = userRepository.findByEmail(request.getEmail()).get();
-                var jwtToken = jwtService.generateToken((UserDetails) user);
+                var jwtToken = jwtUtil.generateToken((UserDetails) user);
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
                                 .build();
