@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aylinaygul.librarymanagementapp.service.BorrowService;
+
 import com.aylinaygul.librarymanagementapp.model.dto.response.BorrowResponse;
 import com.aylinaygul.librarymanagementapp.model.entity.User;
 
@@ -34,7 +35,7 @@ public class BorrowController {
     }
 
     @PostMapping("/{bookId}")
-    @PreAuthorize("hasRole('PATRON')")
+    @PreAuthorize("hasRole('ROLE_PATRON')")
     public ResponseEntity<String> borrowBook(@PathVariable UUID bookId) {
         UUID userId = getAuthenticatedUserId();
         borrowService.borrowBook(userId, bookId);
@@ -42,7 +43,7 @@ public class BorrowController {
     }
 
     @PostMapping("/return/{bookId}")
-    @PreAuthorize("hasRole('PATRON')")
+    @PreAuthorize("hasRole('ROLE_PATRON')")
     public ResponseEntity<String> returnBook(@PathVariable UUID bookId) {
         UUID userId = getAuthenticatedUserId();
         borrowService.returnBook(userId, bookId);
@@ -51,7 +52,7 @@ public class BorrowController {
 
     // 🔎 GET /borrow/history - Patron views their own history
     @GetMapping("/history")
-    @PreAuthorize("hasRole('PATRON')")
+    @PreAuthorize("hasRole('ROLE_PATRON')")
     public ResponseEntity<List<BorrowResponse>> getOwnHistory() {
         UUID userId = getAuthenticatedUserId();
         List<BorrowResponse> history = borrowService.getUserBorrowingHistory(userId);
@@ -60,7 +61,7 @@ public class BorrowController {
 
     // 🔎 GET /borrow/history/{userId} - Librarian views any user's history
     @GetMapping("/history/{userId}")
-    @PreAuthorize("hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
     public ResponseEntity<List<BorrowResponse>> getUserHistory(@PathVariable UUID userId) {
         List<BorrowResponse> history = borrowService.getUserBorrowingHistory(userId);
         return ResponseEntity.ok(history);
@@ -68,7 +69,7 @@ public class BorrowController {
 
     // 🕒 GET /borrow/overdue - Librarian views all overdue records
     @GetMapping("/overdue")
-    @PreAuthorize("hasRole('LIBRARIAN')")
+    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
     public ResponseEntity<List<BorrowResponse>> getOverdueBooks() {
         List<BorrowResponse> overdue = borrowService.getOverdueBooks();
         return ResponseEntity.ok(overdue);

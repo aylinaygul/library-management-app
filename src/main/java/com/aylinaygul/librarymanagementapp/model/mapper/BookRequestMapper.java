@@ -1,5 +1,6 @@
 package com.aylinaygul.librarymanagementapp.model.mapper;
 
+import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -14,7 +15,6 @@ public interface BookRequestMapper {
     @Mapping(target = "records", ignore = true)
     Book toEntity(BookRequest dto);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "records", ignore = true)
+    @InheritConfiguration(name = "toEntity")
     void updateBookFromRequest(BookRequest request, @MappingTarget Book book);
 }

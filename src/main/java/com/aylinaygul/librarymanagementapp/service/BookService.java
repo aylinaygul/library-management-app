@@ -3,6 +3,11 @@ package com.aylinaygul.librarymanagementapp.service;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.aylinaygul.librarymanagementapp.model.dto.request.BookRequest;
@@ -31,6 +36,25 @@ public class BookService {
         return bookRepository.findById(id)
                 .map(bookResponseMapper::toDTO)
                 .orElse(null);
+    }
+
+    public Page<BookResponse> searchBooks(String title, String author, String isbn, String genre, int page, int size) {
+        Book probe = new Book();
+        probe.setTitle(title);
+        probe.setAuthor(author);
+        probe.setIsbn(isbn);
+        probe.setGenre(genre);
+
+        ExampleMatcher matcher = ExampleMatcher.matchingAll()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<Book> example = Example.of(probe, matcher);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> bookPage = bookRepository.findAll(example, pageable);
+
+        return bookPage.map(bookResponseMapper::toDTO);
     }
 
     @Transactional

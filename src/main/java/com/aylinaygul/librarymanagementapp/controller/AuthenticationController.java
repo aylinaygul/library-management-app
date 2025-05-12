@@ -10,6 +10,8 @@ import com.aylinaygul.librarymanagementapp.model.dto.request.AuthenticationReque
 import com.aylinaygul.librarymanagementapp.model.dto.response.AuthenticationResponse;
 import com.aylinaygul.librarymanagementapp.service.AuthenticationService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,14 +23,14 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest request) {
         System.out.println(request);
         return ResponseEntity.ok(authenticationService.register(request));
 
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest request) {
         System.out.println(request);
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
