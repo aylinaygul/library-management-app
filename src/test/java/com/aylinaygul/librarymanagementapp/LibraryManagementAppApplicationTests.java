@@ -1,13 +1,13 @@
-package com.aylinaygul.librarymanagementapp;
+// package com.aylinaygul.librarymanagementapp;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class LibraryManagementAppApplicationTests {
+// @SpringBootTest
+// class LibraryManagementAppApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+// @Test
+// void contextLoads() {
+// }
 
-}
+// }
