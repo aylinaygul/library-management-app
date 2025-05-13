@@ -33,9 +33,14 @@ public class BorrowController {
 
     private UUID getAuthenticatedUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = (User) userDetails;
-        return user.getId();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            if (userDetails instanceof User) {
+                User user = (User) userDetails;
+                return user.getId();
+            }
+        }
+        throw new RuntimeException("Authenticated user not found.");
     }
 
     @PostMapping("/{bookId}")
@@ -58,7 +63,6 @@ public class BorrowController {
         return ResponseEntity.ok("Book returned successfully.");
     }
 
-    // 🔎 GET /borrow/history - Patron views their own history
     @GetMapping("/history")
     @PreAuthorize("hasRole('ROLE_PATRON')")
     @Operation(summary = "Get authenticated user's borrow history",
@@ -69,7 +73,6 @@ public class BorrowController {
         return ResponseEntity.ok(history);
     }
 
-    // 🔎 GET /borrow/history/{userId} - Librarian views any user's history
     @GetMapping("/history/{userId}")
     @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
     @Operation(summary = "Get a specific user's borrow history",
@@ -79,7 +82,6 @@ public class BorrowController {
         return ResponseEntity.ok(history);
     }
 
-    // 🕒 GET /borrow/overdue - Librarian views all overdue records
     @GetMapping("/overdue")
     @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
     @Operation(summary = "Get all overdue borrowed books",

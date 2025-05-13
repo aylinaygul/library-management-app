@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("api/v1/books")
 @Tag(name = "Books", description = "API endpoints for book CRUD operations")
 public class BookController {
+
     private final BookService bookService;
 
     @Operation(summary = "Get all books",
@@ -47,8 +48,7 @@ public class BookController {
                                     schema = @Schema(implementation = BookResponse.class))))})
     @GetMapping()
     public ResponseEntity<List<BookResponse>> getAllBooks() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(bookService.getAllBooks());
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks());
     }
 
     @Operation(summary = "Get book by ID", description = "Retrieves a book by its unique ID",
@@ -109,8 +109,7 @@ public class BookController {
                     @ApiResponse(responseCode = "404", description = "Book not found")})
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
-    public ResponseEntity<BookResponse> updateBook(
-            @PathVariable UUID id,
+    public ResponseEntity<BookResponse> updateBook(@PathVariable UUID id,
             @Valid @RequestBody BookRequest bookRequestDTO) {
 
         BookResponse updatedBook = bookService.updateBook(id, bookRequestDTO);
@@ -128,5 +127,4 @@ public class BookController {
         bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
     }
-
 }

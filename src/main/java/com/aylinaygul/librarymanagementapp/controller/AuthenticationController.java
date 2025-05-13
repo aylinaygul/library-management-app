@@ -38,7 +38,6 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "409", description = "User already exists")})
     public ResponseEntity<AuthenticationResponse> register(
             @Valid @RequestBody RegisterRequest request) {
-        System.out.println(request);
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
