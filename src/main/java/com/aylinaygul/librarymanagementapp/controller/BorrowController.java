@@ -19,11 +19,15 @@ import com.aylinaygul.librarymanagementapp.service.BorrowService;
 import com.aylinaygul.librarymanagementapp.model.dto.response.BorrowResponse;
 import com.aylinaygul.librarymanagementapp.model.entity.User;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/borrow")
+@Tag(name = "Borrow Records", description = "API endpoints for borrow management")
 public class BorrowController {
     private final BorrowService borrowService;
 
@@ -36,6 +40,8 @@ public class BorrowController {
 
     @PostMapping("/{bookId}")
     @PreAuthorize("hasRole('ROLE_PATRON')")
+    @Operation(summary = "Borrow a book",
+            description = "Allows an authenticated patron to borrow a book by providing the book ID")
     public ResponseEntity<String> borrowBook(@PathVariable UUID bookId) {
         UUID userId = getAuthenticatedUserId();
         borrowService.borrowBook(userId, bookId);
@@ -44,6 +50,8 @@ public class BorrowController {
 
     @PostMapping("/return/{bookId}")
     @PreAuthorize("hasRole('ROLE_PATRON')")
+    @Operation(summary = "Return a borrowed book",
+            description = "Allows an authenticated patron to return a previously borrowed book")
     public ResponseEntity<String> returnBook(@PathVariable UUID bookId) {
         UUID userId = getAuthenticatedUserId();
         borrowService.returnBook(userId, bookId);
@@ -53,6 +61,8 @@ public class BorrowController {
     // 🔎 GET /borrow/history - Patron views their own history
     @GetMapping("/history")
     @PreAuthorize("hasRole('ROLE_PATRON')")
+    @Operation(summary = "Get authenticated user's borrow history",
+            description = "Retrieves the borrow history of the currently authenticated patron")
     public ResponseEntity<List<BorrowResponse>> getOwnHistory() {
         UUID userId = getAuthenticatedUserId();
         List<BorrowResponse> history = borrowService.getUserBorrowingHistory(userId);
@@ -62,6 +72,8 @@ public class BorrowController {
     // 🔎 GET /borrow/history/{userId} - Librarian views any user's history
     @GetMapping("/history/{userId}")
     @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
+    @Operation(summary = "Get a specific user's borrow history",
+            description = "Allows a librarian to retrieve the borrow history of a specific user by user ID")
     public ResponseEntity<List<BorrowResponse>> getUserHistory(@PathVariable UUID userId) {
         List<BorrowResponse> history = borrowService.getUserBorrowingHistory(userId);
         return ResponseEntity.ok(history);
@@ -70,6 +82,8 @@ public class BorrowController {
     // 🕒 GET /borrow/overdue - Librarian views all overdue records
     @GetMapping("/overdue")
     @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
+    @Operation(summary = "Get all overdue borrowed books",
+            description = "Allows a librarian to retrieve a list of all overdue borrowed books")
     public ResponseEntity<List<BorrowResponse>> getOverdueBooks() {
         List<BorrowResponse> overdue = borrowService.getOverdueBooks();
         return ResponseEntity.ok(overdue);
