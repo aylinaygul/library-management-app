@@ -7,6 +7,9 @@ import com.aylinaygul.librarymanagementapp.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Tag(name = "Users", description = "API endpoints for user CRUD operations")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
 
     @GetMapping
@@ -37,7 +42,10 @@ public class UserController {
             @ApiResponse(responseCode = "403",
                     description = "Forbidden - Only librarians can access this endpoint")})
     public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+        logger.info("Librarian requested list of all users");
+        List<UserResponse> users = userService.getAllUsers();
+        logger.debug("Total users found: {}", users.size());
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
@@ -50,7 +58,9 @@ public class UserController {
             @ApiResponse(responseCode = "403",
                     description = "Forbidden - Only librarians can access this endpoint")})
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+        logger.info("Librarian requested details for user with ID {}", id);
+        UserResponse user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}")
@@ -64,7 +74,11 @@ public class UserController {
                     description = "Forbidden - Only librarians can access this endpoint")})
     public ResponseEntity<UserResponse> updateUser(@PathVariable UUID id,
             @Valid @RequestBody UserUpdateRequest request) {
-        return ResponseEntity.ok(userService.updateUser(id, request));
+        logger.info("Librarian is updating user with ID {}", id);
+        logger.debug("Update request: {}", request);
+        UserResponse updatedUser = userService.updateUser(id, request);
+        logger.info("Successfully updated user with ID {}", id);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
@@ -76,7 +90,9 @@ public class UserController {
             @ApiResponse(responseCode = "403",
                     description = "Forbidden - Only librarians can access this endpoint")})
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
+        logger.warn("Librarian is attempting to delete user with ID {}", id);
         userService.deleteUser(id);
+        logger.info("Successfully deleted user with ID {}", id);
         return ResponseEntity.noContent().build();
     }
 }

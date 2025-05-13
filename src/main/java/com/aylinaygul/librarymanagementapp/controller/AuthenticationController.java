@@ -1,6 +1,8 @@
 package com.aylinaygul.librarymanagementapp.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Tag(name = "Authentication", description = "API endpoints for authentication")
 public class AuthenticationController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
@@ -38,7 +42,12 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "409", description = "User already exists")})
     public ResponseEntity<AuthenticationResponse> register(
             @Valid @RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authenticationService.register(request));
+
+        logger.info("Registering new user with email: {}", request.getEmail());
+        AuthenticationResponse response = authenticationService.register(request);
+        logger.info("User registered successfully: {}", request.getEmail());
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
@@ -50,7 +59,11 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "404", description = "User not found")})
     public ResponseEntity<AuthenticationResponse> login(
             @Valid @RequestBody AuthenticationRequest request) {
-        System.out.println(request);
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+
+        logger.info("User attempting login with email: {}", request.getEmail());
+        AuthenticationResponse response = authenticationService.authenticate(request);
+        logger.info("User authenticated successfully: {}", request.getEmail());
+
+        return ResponseEntity.ok(response);
     }
 }
