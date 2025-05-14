@@ -14,6 +14,8 @@ public interface BookService {
 
     BookResponse getBookById(UUID id);
 
+    List<BookResponse> getOverdueBooks();
+
     Page<BookResponse> searchBooks(String title, String author, String isbn, String genre, int page,
             int size);
 

@@ -68,6 +68,20 @@ public class BookController {
         return ResponseEntity.ok(book);
     }
 
+    @GetMapping("/reports/overdue")
+    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
+    @Operation(summary = "Generate overdue book report",
+            description = "Retrieves a list of books that are overdue. Only librarians can access this report.",
+            responses = {@ApiResponse(responseCode = "200", description = "Overdue books retrieved",
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(
+                            schema = @Schema(implementation = BookResponse.class))))})
+    public ResponseEntity<List<BookResponse>> getOverdueBooksReport() {
+        logger.info("Generating overdue books report");
+        List<BookResponse> overdueBooks = bookService.getOverdueBooks();
+        logger.debug("Total overdue books found: {}", overdueBooks.size());
+        return ResponseEntity.ok(overdueBooks);
+    }
+
     @GetMapping("/search")
     @Operation(summary = "Search books",
             description = "Searches for books by title, author, ISBN, or genre with pagination",

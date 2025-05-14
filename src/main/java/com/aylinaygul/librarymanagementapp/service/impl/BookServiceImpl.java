@@ -50,6 +50,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<BookResponse> getOverdueBooks() {
+        logger.info("Fetching overdue books from the database.");
+        List<Book> overdueBooks = bookRepository.findOverdueBooks();
+        return bookResponseMapper.toDTOList(overdueBooks);
+    }
+
+
+    @Override
     public Page<BookResponse> searchBooks(String title, String author, String isbn, String genre,
             int page, int size) {
         logger.info("Searching books with parameters - Title: {}, Author: {}, ISBN: {}, Genre: {}",
