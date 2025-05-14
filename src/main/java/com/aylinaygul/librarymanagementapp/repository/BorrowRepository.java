@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.jpa.repository.Query;
 import com.aylinaygul.librarymanagementapp.model.entity.BorrowRecord;
 import com.aylinaygul.librarymanagementapp.model.entity.BorrowStatus;
 
@@ -17,12 +17,16 @@ public interface BorrowRepository extends JpaRepository<BorrowRecord, UUID> {
 
     Optional<BorrowRecord> findByBookIdAndStatus(UUID bookId, BorrowStatus status);
 
-    Optional<BorrowRecord> findByUserIdAndBookIdAndStatus(UUID userId, UUID bookId, BorrowStatus status);
+    Optional<BorrowRecord> findByUserIdAndBookIdAndStatus(UUID userId, UUID bookId,
+            BorrowStatus status);
 
     List<BorrowRecord> findAllByUserIdOrderByBorrowDateDesc(UUID userId);
 
     List<BorrowRecord> findAllByOrderByBorrowDateDesc();
 
     List<BorrowRecord> findByStatusAndDueDateBefore(BorrowStatus status, LocalDate date);
+
+    @Query("SELECT br FROM BorrowRecord br WHERE br.dueDate < CURRENT_DATE AND br.returnDate IS NULL")
+    List<BorrowRecord> findOverdueBorrowRecords();
 
 }
