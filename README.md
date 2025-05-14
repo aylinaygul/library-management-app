@@ -49,8 +49,9 @@ A comprehensive **Library Management System** built with **Spring Boot 3**, **Ja
 
 ### 📄 API Documentation
 
-* Accessible via Swagger UI
+* Accessible via [Swagger](https://app.swaggerhub.com/apis/aylin-14f/library-management/1.0.0)
 * Fully documented endpoints with request/response examples
+* [Postman Collection](https://www.postman.com/research-saganist-83919717/library-management/collection/lwmmio2/library-management?action=share&creator=29648753)
 
 ---
 
