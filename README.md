@@ -222,4 +222,4 @@ https://www.postman.com/research-saganist-83919717/library-management/collection
 ## 👩‍💻 Author
 
 Developed by **Aylin Aygül**
-🌐 [LinkedIn](https://www.linkedin.com/in/aylinaygul) | [GitHub](https://github.com/aylinaygul)
+🌐 [LinkedIn](https://www.linkedin.com/in/aylin-aygul) | [GitHub](https://github.com/aylinaygul)
